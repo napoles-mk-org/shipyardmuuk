@@ -9,8 +9,9 @@ jobs:
         uses: actions/checkout@v2
       - name: Integrate Shipyard
         uses: shipyard/shipyard-action@1.0.0
-        env:
-          SHIPYARD_API_TOKEN: 'KSQQ4W0441IDRfFlMJPxbdB-DxCy11dTaEOm6xBeXmU'
+        with:
+          api-token: ${{ secrets.SHIPYARD_API_TOKEN }}
+          timeout-minutes: 30
       - name: Run the E2E tests against the ephemeral environment
         run: printenv
         shell: bash
