@@ -12,6 +12,7 @@ jobs:
         with:
           api-token: ${{ secrets.SHIPYARD_API_TOKEN }}
           timeout-minutes: 30
+          app-name: 'shipyardmuuk'
       - name: Run the E2E tests against the ephemeral environment
         run: printenv
         shell: bash
