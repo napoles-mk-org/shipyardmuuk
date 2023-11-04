@@ -1,0 +1,19 @@
+on: [pull_request]
+
+jobs:
+  cypress-e2e-tests:
+    runs-on: ubuntu-latest
+    name: Collect the bypass token and URL for an authenticated ephemeral environment attached to this PR in order to run E2E tests on it.
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Integrate Shipyard
+        uses: shipyard/shipyard-action@1.0.0
+        env:
+          SHIPYARD_API_TOKEN: ${{ secrets.SHIPYARD_API_TOKEN }}
+      - name: Run the E2E tests against the ephemeral environment
+        run: printenv
+        shell: bash
+        env:
+            EPH_BASE_URL: $SHIPYARD_ENVIRONMENT_URL
+            EPH_BYPASS_TOKEN: $SHIPYARD_BYPASS_TOKEN
