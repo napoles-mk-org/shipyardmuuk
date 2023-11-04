@@ -3,15 +3,17 @@ orbs:
   shipyard: shipyard/shipyard@1
 jobs:
   ephemeral-e2e-tests:
+    executor:
+      name: cypress/browsers-chrome77
     steps:
       - checkout
       - shipyard/fetch-shipyard-env
       - run:
-          command: |
-            export BASE_URL=${SHIPYARD_ENVIRONMENT_URL}
-            export BYPASS_TOKEN=${SHIPYARD_BYPASS_TOKEN}
-            printenv
-          name: Run the e2e tests on the ephemeral environment
+        command: |
+          export BASE_URL=${SHIPYARD_ENVIRONMENT_URL}
+          export BYPASS_TOKEN=${SHIPYARD_BYPASS_TOKEN}
+          printenv
+        name: Run the e2e tests on the ephemeral environment
 workflows:
   use-my-orb:
     jobs:
