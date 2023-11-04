@@ -1,10 +1,13 @@
-version: '2.1'
+version: 2.1
 orbs:
   shipyard: shipyard/shipyard@1
 jobs:
   ephemeral-e2e-tests:
-    executor:
-      name: cypress/browsers-chrome77
+    docker:
+    - environment:
+        GRADLE_OPTS: -Xmx1024m -XX:MaxMetaspaceSize=256m
+        GRADLE_USER_HOME: .gradle-home
+      image: mcr.microsoft.com/playwright:v1.39.0-jammy
     steps:
       - checkout
       - shipyard/fetch-shipyard-env
@@ -15,6 +18,6 @@ jobs:
             printenv
           name: Run the e2e tests on the ephemeral environment
 workflows:
-  use-my-orb:
+  execute:
     jobs:
       - ephemeral-e2e-tests
