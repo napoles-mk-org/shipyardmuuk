@@ -15,6 +15,6 @@ jobs:
             printenv
           name: Run the e2e tests on the ephemeral environment
 workflows:
-  execute:
+  use-my-orb:
     jobs:
       - ephemeral-e2e-tests
