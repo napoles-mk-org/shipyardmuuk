@@ -3,8 +3,8 @@ orbs:
   shipyard: shipyard/shipyard@1
 jobs:
   ephemeral-e2e-tests:
-    machine:
-      image: ubuntu-2204:2023.10.1
+    docker:
+      - image: cimg/base:stable
     steps:
       - checkout
       - shipyard/fetch-shipyard-env
