@@ -11,9 +11,26 @@ jobs:
           app-name: 'shipyardmuuk'
       - run:
           command: |
-            export BASE_URL=${SHIPYARD_ENVIRONMENT_URL}
-            export BYPASS_TOKEN=${SHIPYARD_BYPASS_TOKEN}
-            printenv
+            apt-get update
+            curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+            sudo apt-get install -y nodejs
+            sudo apt-get install gcc g++ make
+            node -v
+            sudo apt-get install -y unzip
+            sudo apt-get install -y jq
+            printf '{ "key": "%s"}' $MUUKTEST_KEY > file.json
+            cat file.json
+            curl -H  "Content-Type: application/json" -X POST -d @file.json 'https://portal.muuktest.com:8081/generate_token_executer' -o "token.json"
+            curl -X POST https://portal.muuktest.com:8081/api/v1/downloadpwfiles -k -d @file.json -H "Content-Type: application/json" -o ./config.zip
+            unzip -o config.zip -d .
+            TOKEN=$(jq --raw-output .token token.json)
+            printf "Authorization: Bearer %s" $TOKEN > header.txt
+            MUUK_USERID_TOKEN=$(jq --raw-output .userId token.json)
+            printf '{"property": "hashtag", "value": ["#uno"], "platform": "pw", "userId": "%s"}' $MUUK_USERID_TOKEN > body.json
+            curl -X POST https://portal.muuktest.com:8081/download_byproperty -H @header.txt -d @body.json -H "Content-Type: application/json" -o ./test.zip
+            [ -d "./test" ] && rm -r test
+            unzip -o test.zip -d ./test
+            ls -l
           name: Run the e2e tests on the ephemeral environment
 workflows:
   use-my-orb:
