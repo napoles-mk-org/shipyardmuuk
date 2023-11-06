@@ -3,8 +3,8 @@ orbs:
   shipyard: shipyard/shipyard@3.6.1
 jobs:
   ephemeral-e2e-tests:
-    docker:
-      - image: cimg/base:stable
+    executor:
+      name: shipyard/default
     steps:
       - checkout
       - shipyard/fetch-shipyard-env:
