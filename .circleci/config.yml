@@ -7,7 +7,8 @@ jobs:
       - image: cimg/base:stable
     steps:
       - checkout
-      - shipyard/fetch-shipyard-env
+      - shipyard/fetch-shipyard-env:
+          app-name: 'shipyardmuuk'
       - run:
           command: |
             export BASE_URL=${SHIPYARD_ENVIRONMENT_URL}
