@@ -11,7 +11,9 @@ jobs:
           app-name: 'shipyardmuuk'
       - run:
           command: |
-            apt-get update
+            mkdir executor
+            cd executor
+            sudo apt-get update
             curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
             sudo apt-get install -y nodejs
             sudo apt-get install gcc g++ make
@@ -32,6 +34,7 @@ jobs:
             unzip -o test.zip -d ./test
             ls -l
           name: Run the e2e tests on the ephemeral environment
+
 workflows:
   use-my-orb:
     jobs:
