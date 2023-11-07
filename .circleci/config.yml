@@ -28,11 +28,15 @@ jobs:
             TOKEN=$(jq --raw-output .token token.json)
             printf "Authorization: Bearer %s" $TOKEN > header.txt
             MUUK_USERID_TOKEN=$(jq --raw-output .userId token.json)
-            printf '{"property": "hashtag", "value": ["#uno"], "platform": "pw", "userId": "%s"}' $MUUK_USERID_TOKEN > body.json
+            printf '{"property": "tag", "value": ["TC44862"], "platform": "pw", "userId": "%s"}' $MUUK_USERID_TOKEN > body.json
             curl -X POST https://portal.muuktest.com:8081/download_byproperty -H @header.txt -d @body.json -H "Content-Type: application/json" -o ./test.zip
             [ -d "./test" ] && rm -r test
             unzip -o test.zip -d ./test
             ls -l
+            export BASE_TEST_URL=${SHIPYARD_ENVIRONMENT_URL}'/?shipyard_token='${SHIPYARD_BYPASS_TOKEN}
+            echo ${BASE_TEST_URL}
+            echo 'Update base url on test scripts' 
+            sed -i '/let baseurl/a\  baseurl = process.env.BASE_TEST_URL;' ./test/TestSteps_*.spec.ts
           name: Download MuukTest config and scripts
       - run:
           command: |
