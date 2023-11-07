@@ -37,6 +37,7 @@ jobs:
             echo ${BASE_TEST_URL}
             echo 'Update base url on test scripts' 
             sed -i '/let baseurl/a\  baseurl = process.env.BASE_TEST_URL;' ./test/TestSteps_*.spec.ts
+            cat ./test/TestSteps_*.spec.ts
           name: Download MuukTest config and scripts
       - run:
           command: |
@@ -45,7 +46,7 @@ jobs:
             npx playwright install --with-deps chromium
             npm install axios
             npm install archiver
-            npx playwright test --workers=4 --project=chromium
+            npx playwright test --workers=3 --project=chromium
           name: Execute MuukTest on the ephemeral environment
 
 workflows:
