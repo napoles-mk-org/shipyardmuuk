@@ -37,7 +37,7 @@ jobs:
       - run:
           command: |
             npm install -D @playwright/test
-            npx playwright install --with-deps 
+            npx playwright install --with-deps chromium
             npm install axios
             npx playwright test --workers=4 --project=chromium
           name: Execute MuukTest on the ephemeral environment
