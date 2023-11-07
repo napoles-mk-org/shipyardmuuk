@@ -34,7 +34,7 @@ jobs:
             unzip -o test.zip -d ./test
             ls -l
           name: Download MuukTest config and scripts
-       -run:
+      - run:
           command: |
             npm install -D @playwright/test
             npx playwright install --with-deps 
