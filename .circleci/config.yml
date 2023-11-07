@@ -14,7 +14,7 @@ jobs:
             mkdir executor
             cd executor
             sudo apt-get update
-            curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+            curl -sL https://deb.nodesource.com/setup_20.x | sudo -E bash -
             sudo apt-get install -y nodejs
             sudo apt-get install gcc g++ make
             node -v
@@ -37,7 +37,6 @@ jobs:
             echo ${BASE_TEST_URL}
             echo 'Update base url on test scripts' 
             sed -i '/let baseurl/a\  baseurl = `'${BASE_TEST_URL}'`;' ./test/TestSteps_*.spec.ts
-            cat ./test/TestSteps_*.spec.ts
           name: Download MuukTest config and scripts
       - run:
           command: |
