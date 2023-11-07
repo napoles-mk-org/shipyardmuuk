@@ -33,7 +33,15 @@ jobs:
             [ -d "./test" ] && rm -r test
             unzip -o test.zip -d ./test
             ls -l
-          name: Run the e2e tests on the ephemeral environment
+          name: Download MuukTest config and scripts
+       -run:
+          command: |
+            npm install -D @playwright/test
+            npx playwright install --with-deps 
+            npm install axios
+            npx playwright test --workers=4 --project=chromium
+          name: Execute MuukTest on the ephemeral environment
+
 workflows:
   use-my-orb:
     jobs:
