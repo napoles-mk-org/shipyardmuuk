@@ -8,7 +8,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Fetch Shipyard Tokens
-        uses: shipyard/github-action/fetch-shipyard-env@1.0.0
+        uses: shipyard/github-action/fetch-shipyard-env@1.0.1
         with:
             api-token: ${{ secrets.SHIPYARD_API_TOKEN }}
             app-name: 'shipyardmuuk'
