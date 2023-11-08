@@ -46,12 +46,13 @@ jobs:
             echo $BASE_TEST_URL
             echo 'Update base url on test scripts' 
             sed -i '/let baseurl/a\  baseurl = `'$BASE_TEST_URL'`;' ./test/TestSteps_*.spec.ts
-        env:
-          MUUKTEST_KEY: ${{ secrets.MUUKTEST_KEY }}
         shell: bash
-      - name: Run the E2E tests against the ephemeral environment1
-        run: printenv
+      - name: Run MuukTest against the ephemeral environment
+        run: |
+            cd executor
+            npm install -D @playwright/test
+            npx playwright install --with-deps chromium
+            npm install axios
+            npm install archiver
+            npx playwright test --workers=3 --project=chromium
         shell: bash
-        env:
-            EPH_BASE_URL: $SHIPYARD_ENVIRONMENT_URL
-            EPH_BYPASS_TOKEN: $SHIPYARD_BYPASS_TOKEN
