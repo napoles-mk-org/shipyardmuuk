@@ -1,7 +1,7 @@
 on: [pull_request]
 
 jobs:
-  cypress-e2e-tests:
+  muuktest-e2e-tests:
     runs-on: ubuntu-latest
     name: Collect the bypass token and URL for an authenticated ephemeral environment attached to this PR in order to run e2e tests on it.
     steps:
@@ -13,6 +13,42 @@ jobs:
           SHIPYARD_API_TOKEN: ${{ secrets.SHIPYARD_API_TOKEN }}
           INPUT_API_TOKEN: ${{ secrets.SHIPYARD_API_TOKEN }}
           INPUT_APP_NAME: 'shipyardmuuk'
+      - name: Retrieve MuukTest config and Tests
+        run: |
+            mkdir executor
+            cd executor
+            sudo apt-get update
+            sudo apt-get install -y ca-certificates curl gnupg
+            sudo mkdir -p /etc/apt/keyrings
+            curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
+            NODE_MAJOR=20
+            echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list
+            sudo apt-get update
+            sudo apt-get install nodejs -y
+            sudo apt-get install gcc g++ make
+            node -v
+            sudo apt-get install -y unzip
+            node -v
+            printf '{ "key": "%s"}' $MUUKTEST_KEY > file.json
+            cat file.json
+            curl -H  "Content-Type: application/json" -X POST -d @file.json 'https://portal.muuktest.com:8081/generate_token_executer' -o "token.json"
+            curl -X POST https://portal.muuktest.com:8081/api/v1/downloadpwfiles -k -d @file.json -H "Content-Type: application/json" -o ./config.zip
+            unzip -o config.zip -d .
+            TOKEN=$(jq --raw-output .token token.json)
+            printf "Authorization: Bearer %s" $TOKEN > header.txt
+            MUUK_USERID_TOKEN=$(jq --raw-output .userId token.json)
+            printf '{"property": "tag", "value": ["TC44862"], "platform": "pw", "userId": "%s"}' $MUUK_USERID_TOKEN > body.json
+            curl -X POST https://portal.muuktest.com:8081/download_byproperty -H @header.txt -d @body.json -H "Content-Type: application/json" -o ./test.zip
+            [ -d "./test" ] && rm -r test
+            unzip -o test.zip -d ./test
+            ls -l
+            BASE_TEST_URL=$SHIPYARD_ENVIRONMENT_URL'/?shipyard_token='$SHIPYARD_BYPASS_TOKEN
+            echo $BASE_TEST_URL
+            echo 'Update base url on test scripts' 
+            sed -i '/let baseurl/a\  baseurl = `'$BASE_TEST_URL'`;' ./test/TestSteps_*.spec.ts
+        env:
+          MUUKTEST_KEY: ${{ secrets.MUUKTEST_KEY }}
+        shell: bash
       - name: Run the E2E tests against the ephemeral environment1
         run: printenv
         shell: bash
