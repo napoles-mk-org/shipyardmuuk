@@ -50,6 +50,8 @@ jobs:
         shell: bash
         env:
             MUUKTEST_KEY: ${{ secrets.MUUKTEST_KEY }}
+            TAG_PROPERTY: ${{ env.TAG_PROPERTY }}
+            TAG_VALUE: ${{ env.TAG_VALUE }}
       - name: Run MuukTest against the ephemeral environment
         run: |
             cd executor
