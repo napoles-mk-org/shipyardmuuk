@@ -10,7 +10,7 @@ jobs:
       - name: Integrate Shipyard
         uses: shipyard/github-action/fetch-shipyard-env@1.0.0
         env:
-          SHIPYARD_API_TOKEN: ${{ secrets.SHIPYARD_API_TOKEN }
+          SHIPYARD_API_TOKEN: ${{ secrets.SHIPYARD_API_TOKEN }}
       - name: Run the E2E tests against the ephemeral environment
         run: printenv
         shell: bash
