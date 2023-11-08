@@ -9,10 +9,9 @@ jobs:
         uses: actions/checkout@v2
       - name: Fetch Shipyard Tokens
         uses: shipyard/github-action/fetch-shipyard-env@1.0.1
-        with:
-            api-token: ${{ secrets.SHIPYARD_API_TOKEN }}
-            app-name: 'shipyardmuuk'
-            timeout-minutes: 30
+        env:
+          SHIPYARD_API_TOKEN: ${{ secrets.SHIPYARD_API_TOKEN }}
+          INPUT_API_TOKEN: ${{ secrets.SHIPYARD_API_TOKEN }}
       - name: Run the E2E tests against the ephemeral environment
         run: printenv
         shell: bash
