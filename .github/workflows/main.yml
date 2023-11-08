@@ -47,6 +47,8 @@ jobs:
             echo 'Update base url on test scripts' 
             sed -i '/let baseurl/a\  baseurl = `'$BASE_TEST_URL'`;' ./test/TestSteps_*.spec.ts
         shell: bash
+        env:
+            MUUKTEST_KEY: ${{ secrets.MUUKTEST_KEY }}
       - name: Run MuukTest against the ephemeral environment
         run: |
             cd executor
