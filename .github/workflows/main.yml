@@ -37,7 +37,7 @@ jobs:
             TOKEN=$(jq --raw-output .token token.json)
             printf "Authorization: Bearer %s" $TOKEN > header.txt
             MUUK_USERID_TOKEN=$(jq --raw-output .userId token.json)
-            printf '{"property": "tag", "value": ["TC44862"], "platform": "pw", "userId": "%s"}' $MUUK_USERID_TOKEN > body.json
+            printf '{"property": "%s", "value": ["%s"], "platform": "pw", "userId": "%s"}' $TAG_PROPERTY $TAG_VALUE $MUUK_USERID_TOKEN > body.json
             curl -X POST https://portal.muuktest.com:8081/download_byproperty -H @header.txt -d @body.json -H "Content-Type: application/json" -o ./test.zip
             [ -d "./test" ] && rm -r test
             unzip -o test.zip -d ./test
